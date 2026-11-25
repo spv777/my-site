@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ЭкоПосёлок — Коттеджные посёлки и земельные участки</title>
+    <style>
+        :root {
+            --primary: #15803d;
+            --primary-dark: #166534;
+            --dark: #0f172a;
+            --text: #334155;
+            --muted: #64748b;
+            --bg: #f8fafc;
+            --white: #ffffff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--bg); color: var(--text); line-height: 1.6; }
+        section[id], footer[id] { scroll-margin-top: 92px; }
+        svg { display: block; }
+
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px 8%; background: #ffffff; box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .logo { font-size: 24px; font-weight: 800; color: var(--primary); text-decoration: none; }
+        .logo span { color: var(--dark); }
+        nav { display: flex; gap: 25px; }
+        nav a { text-decoration: none; color: var(--text); font-weight: 500; font-size: 15px; }
+        nav a:hover { color: var(--primary); }
+        .header-right { display: flex; align-items: center; gap: 20px; }
+        .phone { font-weight: 700; color: var(--dark); text-decoration: none; }
+        .btn-sm {
+            background: var(--primary); color: #fff; padding: 10px 20px; border-radius: 8px;
+            font-weight: 600; font-size: 14px; border: none; cursor: pointer;
+        }
+        .btn-sm:hover { background: var(--primary-dark); }
+
+        .hero {
+            background: linear-gradient(135deg, #0f172a 0%, #14532d 100%);
+            min-height: 75vh; display: flex; flex-direction: column; justify-content: center;
+            padding: 60px 8%; color: #ffffff; position: relative; overflow: hidden;
+        }
+        .skyline { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; pointer-events: none; }
+        .hero-content { position: relative; }
+        .badge {
+            display: inline-block; background: rgba(255, 255, 255, 0.15);
+            padding: 8px 16px; border-radius: 30px; font-size: 13px; font-weight: 600; margin-bottom: 24px; width: fit-content;
+        }
+        .hero h1 { font-size: clamp(30px, 4.5vw, 52px); max-width: 780px; line-height: 1.15; margin-bottom: 22px; font-weight: 800; }
+        .hero p { font-size: 18px; max-width: 620px; color: #e2e8f0; margin-bottom: 38px; }
+        .cta-group { display: flex; gap: 16px; flex-wrap: wrap; }
+        .btn-primary {
+            background: #22c55e; color: #052e16; padding: 16px 34px; border-radius: 10px;
+            text-decoration: none; font-weight: 700; font-size: 16px; border: none; cursor: pointer;
+            display: inline-block; text-align: center;
+        }
+        .btn-primary:hover { background: #4ade80; }
+        .btn-secondary {
+            background: rgba(255,255,255,0.12); color: #fff; padding: 16px 34px; border-radius: 10px;
+            font-weight: 600; font-size: 16px; border: 1px solid rgba(255,255,255,0.4); cursor: pointer;
+        }
+        .btn-secondary:hover { background: rgba(255,255,255,0.22); }
+
+        .features {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px; padding: 0 8%; margin-top: -50px; position: relative; z-index: 10;
+        }
+        .feature-card {
+            background: #fff; padding: 28px; border-radius: 14px;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06); border-bottom: 4px solid var(--primary);
+        }
+        .f-icon {
+            width: 44px; height: 44px; border-radius: 12px; background: #ecfdf5;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 14px;
+        }
+        .f-icon svg { width: 22px; height: 22px; stroke: var(--primary); }
+        .feature-card h3 { font-size: 18px; margin-bottom: 8px; color: var(--dark); }
+        .feature-card p { font-size: 14px; color: var(--muted); }
+
+        section.block { padding: 70px 8%; }
+        .section-head { margin-bottom: 35px; }
+        .section-head h2 { font-size: 32px; color: var(--dark); font-weight: 800; }
+        .section-head p { color: var(--muted); }
+
+        .filter-bar {
+            background: #fff; padding: 22px 28px; border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 35px;
+            display: flex; gap: 20px; flex-wrap: wrap;
+        }
+        .filter-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 180px; }
+        .filter-group label { font-size: 13px; font-weight: 600; color: var(--muted); }
+        .filter-group select { padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; }
+
+        .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 28px; }
+        .plot-card {
+            background: #fff; border-radius: 16px; overflow: hidden;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06); display: flex; flex-direction: column;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+        .plot-card:hover { transform: translateY(-4px); box-shadow: 0 14px 34px rgba(15, 23, 42, 0.10); }
+        .plot-cover {
+            height: 180px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;
+            color: #fff; font-weight: 700; position: relative; overflow: hidden;
+        }
+        .plot-cover .scene { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.35; }
+        .plot-cover > span { position: relative; z-index: 1; }
+        .plot-tag { background: rgba(0,0,0,0.4); padding: 4px 12px; border-radius: 6px; font-size: 12px; width: fit-content; }
+        .plot-note { display: flex; align-items: center; gap: 8px; font-size: 18px; }
+        .plot-note svg { stroke: currentColor; }
+        .plot-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+        .plot-loc { font-size: 13px; color: var(--primary); font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+        .plot-title { font-size: 20px; font-weight: 700; color: var(--dark); margin-bottom: 12px; }
+        .plot-specs {
+            display: flex; gap: 15px; padding: 12px 0; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9;
+            margin-bottom: 16px; font-size: 14px; color: var(--muted);
+        }
+        .plot-footer { margin-top: auto; display: flex; justify-content: space-between; align-items: center; }
+        .plot-price { font-size: 22px; font-weight: 800; color: var(--dark); }
+
+        .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+        .review-card { background: #fff; padding: 28px; border-radius: 14px; box-shadow: 0 6px 20px rgba(0,0,0,0.04); }
+        .review-stars { color: #f59e0b; margin-bottom: 10px; font-size: 18px; letter-spacing: 2px; }
+        .review-card blockquote { font-style: italic; color: var(--text); }
+        .review-author { margin-top: 14px; font-weight: 700; color: var(--dark); }
+
+        .cta-banner {
+            background: var(--dark); color: #fff; border-radius: 20px; padding: 45px;
+            display: grid; grid-template-columns: 1.2fr 1fr; gap: 35px; align-items: center;
+        }
+        .cta-banner h2 { font-size: 28px; margin-bottom: 10px; }
+        .cta-banner p { color: #cbd5e1; }
+        .lead-form { display: flex; flex-direction: column; gap: 12px; }
+        .lead-form input { padding: 14px; border-radius: 8px; border: none; font-size: 15px; }
+        footer { background: #090d16; color: #94a3b8; padding: 35px 8%; text-align: center; font-size: 14px; }
+        footer strong { color: #e2e8f0; }
+
+        .modal {
+            display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75);
+            z-index: 200; align-items: center; justify-content: center; padding: 20px;
+        }
+        .modal.active { display: flex; }
+        .modal-box { background: #fff; padding: 32px; border-radius: 16px; max-width: 420px; width: 100%; position: relative; }
+        .modal-box h3 { font-size: 22px; color: var(--dark); margin-bottom: 6px; }
+        .modal-hint { font-size: 14px; color: var(--muted); margin-bottom: 18px; }
+        .close-modal { position: absolute; top: 14px; right: 18px; font-size: 24px; cursor: pointer; border: none; background: none; color: var(--muted); }
+        @media (max-width: 850px) { nav { display: none; } .cta-banner { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="#" class="logo">ЭКО<span>ПОСЁЛОК</span></a>
+        <nav>
+            <a href="#catalog">Каталог участков</a>
+            <a href="#about">О посёлке</a>
+            <a href="#reviews">Отзывы</a>
+            <a href="#contacts">Контакты</a>
+        </nav>
+        <div class="header-right">
+            <a href="tel:+74950000000" class="phone">+7 (495) 000-00-00</a>
+            <button class="btn-sm" onclick="openModal('Запись на просмотр')">Записаться</button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <svg class="skyline" viewBox="0 0 1440 150" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 105 C110 80 190 120 320 100 S560 62 700 95 S980 125 1120 88 S1310 105 1440 82 V150 H0 Z" fill="#ffffff" opacity="0.06"/>
+            <path d="M0 128 L70 108 L96 122 L128 96 L155 122 L230 105 L262 128 L310 90 L340 122 L420 108 L455 130 L520 100 L548 124 L610 112 L645 88 L675 120 L760 106 L800 130 L860 96 L890 124 L970 110 L1005 84 L1035 120 L1120 104 L1160 128 L1230 98 L1260 124 L1350 110 L1390 88 L1440 118 V150 H0 Z" fill="#14532d" opacity="0.35"/>
+        </svg>
+        <div class="hero-content">
+            <span class="badge">● Старт продаж новой очереди • Участки ИЖС с газом</span>
+            <h1>Земельные участки и готовые дома в окружении хвойного леса</h1>
+            <p>Центральные коммуникации по границе, асфальтированные дороги, охрана 24/7 и собственная парковая зона у озера.</p>
+            <div class="cta-group">
+                <a href="#catalog" class="btn-primary">Подобрать участок</a>
+                <button class="btn-secondary" onclick="openModal('Экскурсия по посёлку')">Записаться на просмотр</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="about">
+        <div class="feature-card">
+            <span class="f-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></span>
+            <h3>Все коммуникации</h3>
+            <p>Магистральный газ, электричество 15 кВт, центральный водопровод и интернет.</p>
+        </div>
+        <div class="feature-card">
+            <span class="f-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 11 2 2 4-4"/></svg></span>
+            <h3>Безопасность 24/7</h3>
+            <p>Закрытая территория, КПП на въезде по пропускам, видеонаблюдение.</p>
+        </div>
+        <div class="feature-card">
+            <span class="f-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l5 7h-3l4 6H6l4-6H7l5-7z"/><path d="M12 16v5"/></svg></span>
+            <h3>Природа и комфорт</h3>
+            <p>Выход в лесопарк, обустроенный пляж, детские площадки и магазин.</p>
+        </div>
+        <div class="feature-card">
+            <span class="f-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></svg></span>
+            <h3>Чистые документы</h3>
+            <p>Статус земель ИЖС, прописка и полное юридическое сопровождение сделки.</p>
+        </div>
+    </section>
+
+    <section class="block" id="catalog">
+        <div class="section-head">
+            <h2>Каталог участков</h2>
+            <p>Выберите подходящий участок по площади, расположению и стоимости</p>
+        </div>
+
+        <div class="filter-bar">
+            <div class="filter-group">
+                <label>Локация</label>
+                <select id="filterLoc" onchange="filterPlots()">
+                    <option value="all">Все посёлки</option>
+                    <option value="Сосновый берег">КП «Сосновый берег»</option>
+                    <option value="Лесная поляна">КП «Лесная поляна»</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Площадь участка</label>
+                <select id="filterArea" onchange="filterPlots()">
+                    <option value="all">Любая площадь</option>
+                    <option value="small">До 10 соток</option>
+                    <option value="large">От 10 соток</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Бюджет</label>
+                <select id="filterPrice" onchange="filterPlots()">
+                    <option value="all">Любой бюджет</option>
+                    <option value="low">До 3 500 000 ₽</option>
+                    <option value="high">От 3 500 000 ₽</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Тот самый контейнер для карточек каталога -->
+        <div class="catalog-grid" id="catalogGrid"></div>
+    </section>
+
+    <section class="block" id="reviews">
+        <div class="section-head">
+            <h2>Отзывы жителей</h2>
+        </div>
+        <div class="reviews-grid">
+            <div class="review-card">
+                <div class="review-stars">★★★★★</div>
+                <blockquote>«Купили участок 10 соток в прошлом году, уже закончили коробку дома. Дороги зимой чистят идеально, газ подключили без задержек.»</blockquote>
+                <div class="review-author">Алексей и Марина, участок №42</div>
+            </div>
+            <div class="review-card">
+                <div class="review-stars">★★★★★</div>
+                <blockquote>«Очень тихое и красивое место, до города 25 минут по трассе. Дети гуляют на площадке безопасно, территория закрытая.»</blockquote>
+                <div class="review-author">Дмитрий Соколов, участок №18</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="block">
+        <div class="cta-banner">
+            <div>
+                <h2>Приезжайте на бесплатную экскурсию</h2>
+                <p>Покажем свободные участки, генплан посёлка и ответим на все вопросы.</p>
+            </div>
+            <form class="lead-form" onsubmit="submitForm(event)">
+                <input type="text" placeholder="Ваше имя">
+                <input type="tel" placeholder="Телефон: +7 (___) ___-__-__" required>
+                <button class="btn-primary" type="submit">Записаться на просмотр</button>
+            </form>
+        </div>
+    </section>
+
+    <footer id="contacts">
+        <strong>ЭкоПосёлок</strong> — демонстрационный концепт главной страницы каталога<br>
+        Московская область • +7 (495) 000-00-00 • info@eco-poselok.example<br><br>
+        © 2026 ЭкоПосёлок. посёлки, цены и отзывы приведены в иллюстративных целях.
+    </footer>
+
+    <div class="modal" id="modal">
+        <div class="modal-box">
+            <button class="close-modal" onclick="closeModal()" aria-label="Закрыть">×</button>
+            <h3 id="modalTitle">Запись на просмотр</h3>
+            <p class="modal-hint">Оставьте телефон, и менеджер свяжется с вами.</p>
+            <form class="lead-form" onsubmit="submitForm(event)">
+                <input type="text" placeholder="Ваше имя">
+                <input type="tel" placeholder="+7 (___) ___-__-__" required>
+                <button class="btn-primary" type="submit">Отправить заявку</button>
+            </form>
+        </div>
+    </div>
+<script>
+const plots = [
+    { id: 1, title: 'Участок №14 у леса', loc: 'Сосновый берег', area: 8, price: 2850000, tag: 'Хит продаж', bg: 'linear-gradient(135deg, #166534, #15803d)' },
+    { id: 2, title: 'Участок №27 видовой', loc: 'Сосновый берег', area: 12, price: 4200000, tag: 'Вид на озеро', bg: 'linear-gradient(135deg, #0369a1, #0284c7)' },
+    { id: 3, title: 'Участок №09 угловой', loc: 'Лесная поляна', area: 9, price: 3100000, tag: 'Рассрочка 0%', bg: 'linear-gradient(135deg, #1e293b, #334155)' },
+    { id: 4, title: 'Участок №33 с соснами', loc: 'Лесная поляна', area: 15, price: 5400000, tag: 'Премиум', bg: 'linear-gradient(135deg, #065f46, #047857)' }
+];
+
+const coverScene = '<svg class="scene" viewBox="0 0 340 180" preserveAspectRatio="xMidYMax slice" aria-hidden="true">' +
+    '<path d="M0 138 L40 112 L62 130 L95 104 L120 132 L160 110 L190 136 L235 108 L270 134 L310 112 L340 130 V180 H0 Z" fill="rgba(255,255,255,0.25)"/>' +
+    '<path d="M52 138 L68 96 L84 138 Z" fill="rgba(255,255,255,0.45)"/><rect x="65" y="138" width="6" height="10" fill="rgba(255,255,255,0.45)"/>' +
+    '<path d="M258 138 L274 98 L290 138 Z" fill="rgba(255,255,255,0.45)"/><rect x="271" y="138" width="6" height="10" fill="rgba(255,255,255,0.45)"/>' +
+    '<path d="M150 132 L170 112 L190 132 Z" fill="rgba(255,255,255,0.5)"/><rect x="156" y="132" width="28" height="18" fill="rgba(255,255,255,0.5)"/>' +
+    '</svg>';
+
+function renderPlots(list) {
+    const grid = document.getElementById('catalogGrid');
+    grid.innerHTML = list.map(p => `<div class="plot-card">
+        <div class="plot-cover" style="background: ${p.bg}">
+            ${coverScene}
+            <span class="plot-tag">${p.tag}</span>
+            <span class="plot-note"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-7 9 7v10a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>${p.area} соток • ИЖС</span>
+        </div>
+        <div class="plot-body">
+            <div class="plot-loc"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>КП «${p.loc}»</div>
+            <div class="plot-title">${p.title}</div>
+            <div class="plot-specs">
+                <span>Площадь: <strong>${p.area} сот.</strong></span>
+                <span>Газ и свет: <strong>Есть</strong></span>
+            </div>
+            <div class="plot-footer">
+                <div class="plot-price">${p.price.toLocaleString('ru-RU')} ₽</div>
+                <button class="btn-sm" onclick="openModal('Запрос: ${p.title}')">Подробнее</button>
+            </div>
+        </div>
+    </div>`).join('');
+}
+
+function filterPlots() {
+    const loc = document.getElementById('filterLoc').value;
+    const area = document.getElementById('filterArea').value;
+    const price = document.getElementById('filterPrice').value;
+    const filtered = plots.filter(p => {
+        if (loc !== 'all' && p.loc !== loc) return false;
+        if (area === 'small' && p.area >= 10) return false;
+        if (area === 'large' && p.area < 10) return false;
+        if (price === 'low' && p.price >= 3500000) return false;
+        if (price === 'high' && p.price < 3500000) return false;
+        return true;
+    });
+    renderPlots(filtered);
+}
+
+function openModal(title) {
+    document.getElementById('modalTitle').innerText = title;
+    document.getElementById('modal').classList.add('active');
+}
+
+function closeModal() { document.getElementById('modal').classList.remove('active'); }
+
+function submitForm(e) {
+    e.preventDefault();
+    alert('Спасибо! Ваша заявка принята (демо-режим).');
+    closeModal();
+}
+
+renderPlots(plots);
+</script>
+</body>
+</html>
